@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Member</title>
+</head>
+
+<body>
+
+<h1 style="text-align:center;">✏️ Edit Member</h1>
+
+<form id="editForm" method="POST" style="width:300px;margin:auto;">
+
+  <input type="text" name="full_name" placeholder="Full Name"><br><br>
+  <input type="number" name="age" placeholder="Age"><br><br>
+  <input type="text" name="gender" placeholder="Gender"><br><br>
+  <input type="text" name="mobile" placeholder="Mobile"><br><br>
+  <input type="email" name="email" placeholder="Email"><br><br>
+
+  <button type="submit">Update</button>
+
+</form>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get("id");
+
+document.getElementById("editForm").action = "/update-member/" + id;
+</script>
+
+</body>
+</html>

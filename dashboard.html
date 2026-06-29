@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+   body {
+  font-family: Arial;
+  background: #f2f2f2;
+  margin: 0;
+}
+
+/* Header */
+h1 {
+  text-align: center;
+  padding: 20px;
+  background: orange;
+  color: white;
+  margin: 0;
+}
+
+/* Cards container */
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 50px;
+  flex-wrap: wrap;   /* IMPORTANT */
+  padding: 10px;
+}
+
+/* Card design */
+.card {
+  width: 250px;
+  max-width: 90%;   /* IMPORTANT for mobile */
+  padding: 20px;
+  background: white;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px gray;
+}
+
+/* Buttons */
+.btn {
+  display: block;
+  margin: 10px auto;
+  padding: 12px;
+  width: 80%;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* Colors */
+.blue { background: blue; }
+.green { background: green; }
+.red { background: red; }
+
+/* 📱 MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+
+  h1 {
+    font-size: 18px;
+    padding: 15px;
+  }
+
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 90%;
+  }
+
+  .btn {
+    width: 100%;
+    font-size: 16px;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+
+<h1>🏋️ Gym Dashboard</h1>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Total Members</h2>
+    <h1 id="count">0</h1>
+  </div>
+
+  <div class="card">
+    <a href="/add-member.html" class="btn green">➕ Add Member</a>
+    <a href="/view-members.html" class="btn blue">👥 View Members</a>
+    <a href="/logout" class="btn red">🚪 Logout</a>
+  </div>
+
+</div>
+
+<script>
+fetch("/total-members")
+.then(res => res.json())
+.then(data => {
+    document.getElementById("count").innerText = data.total;
+});
+</script>
+
+</body>
+</html>

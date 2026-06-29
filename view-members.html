@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>View Members</title>
+</head>
+
+<body>
+
+<h1 style="text-align:center;">👥 Gym Members</h1>
+
+<table border="1" style="margin:auto; width:90%; text-align:center;" id="table">
+
+  <tr style="background:orange; color:white;">
+    <th>ID</th>
+    <th>Name</th>
+    <th>Age</th>
+    <th>Gender</th>
+    <th>Mobile</th>
+    <th>Email</th>
+    <th>Action</th>
+  </tr>
+
+</table>
+
+<script>
+fetch("/api/members")
+.then(res => res.json())
+.then(data => {
+
+    let table = document.getElementById("table");
+
+    data.forEach(m => {
+        table.innerHTML += `
+        <tr>
+            <td>${m.id}</td>
+            <td>${m.full_name}</td>
+            <td>${m.age}</td>
+            <td>${m.gender}</td>
+            <td>${m.mobile}</td>
+            <td>${m.email}</td>
+
+            <td>
+              <a href="/edit-member.html?id=${m.id}">
+                <button style="background:blue;color:white;">Edit</button>
+              </a>
+
+              <a href="/delete-member/${m.id}">
+                <button style="background:red;color:white;">Delete</button>
+              </a>
+            </td>
+        </tr>
+        `;
+    });
+
+});
+</script>
+
+</body>
+</html>
