@@ -189,10 +189,9 @@ app.get("/api/members", (req, res) => {
     db.query(sql, (err, result) => {
 
         if (err) {
-            console.log(err);
-            return res.json([]);
-        }
-
+    console.log("LOGIN ERROR:", err);
+    return res.send("Login Failed: " + err.message);
+}
         res.json(result);
 
     });
