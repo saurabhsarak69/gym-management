@@ -11,7 +11,7 @@ app.use(express.static(__dirname));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// ✅ SESSION SETUP
+// SESSION SETUP
 app.use(session({
     secret: "gym_secret_key",
     resave: false,
@@ -25,7 +25,6 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-
 // Test Route
 app.get("/test", (req, res) => {
     res.send("Test Route Working");
@@ -36,9 +35,7 @@ app.get("/delete-member/:id", (req, res) => {
 
     const id = req.params.id;
 
-    const sql = "DELETE FROM members WHERE id = ?";
-
-    db.query(sql, [id], (err) => {
+    db.query("DELETE FROM members WHERE id = ?", [id], (err) => {
 
         if (err) {
             console.log(err);
@@ -58,8 +55,8 @@ app.post("/update-member/:id", (req, res) => {
     const { full_name, age, gender, mobile, email } = req.body;
 
     const sql = `
-        UPDATE members 
-        SET full_name=?, age=?, gender=?, mobile=?, email=? 
+        UPDATE members
+        SET full_name=?, age=?, gender=?, mobile=?, email=?
         WHERE id=?
     `;
 
@@ -112,10 +109,13 @@ app.post("/register", (req, res) => {
 
 });
 
-// LOGIN (SESSION ADDED HERE)
+// LOGIN
 app.post("/login", (req, res) => {
 
     const { email, password } = req.body;
+
+    console.log("EMAIL:", email);
+    console.log("PASSWORD:", password);
 
     const sql = `
         SELECT * FROM members
@@ -125,26 +125,29 @@ app.post("/login", (req, res) => {
     db.query(sql, [email, password], (err, result) => {
 
         if (err) {
-            console.log(err);
-            return res.send("Login Failed");
+            console.log("LOGIN ERROR:", err);
+            return res.send("Login Failed: " + err.message);
         }
+
+        console.log("LOGIN RESULT:", result);
 
         if (result.length > 0) {
 
-            // ✅ SESSION CREATE
             req.session.user = result[0];
 
             res.redirect("/dashboard.html");
 
         } else {
+
             res.send("Invalid Email or Password");
+
         }
 
     });
 
 });
 
-// 🔐 PROTECTED DASHBOARD
+// PROTECTED DASHBOARD
 app.get("/dashboard.html", (req, res) => {
 
     if (!req.session.user) {
@@ -152,6 +155,7 @@ app.get("/dashboard.html", (req, res) => {
     }
 
     res.sendFile(path.join(__dirname, "dashboard.html"));
+
 });
 
 // LOGOUT
@@ -166,9 +170,7 @@ app.get("/logout", (req, res) => {
 // TOTAL MEMBERS
 app.get("/total-members", (req, res) => {
 
-    const sql = "SELECT COUNT(*) AS total FROM members";
-
-    db.query(sql, (err, result) => {
+    db.query("SELECT COUNT(*) AS total FROM members", (err, result) => {
 
         if (err) {
             console.log(err);
@@ -181,17 +183,16 @@ app.get("/total-members", (req, res) => {
 
 });
 
-// VIEW MEMBERS API
+// VIEW MEMBERS
 app.get("/api/members", (req, res) => {
 
-    const sql = "SELECT * FROM members";
-
-    db.query(sql, (err, result) => {
+    db.query("SELECT * FROM members", (err, result) => {
 
         if (err) {
-    console.log("LOGIN ERROR:", err);
-    return res.send("Login Failed: " + err.message);
-}
+            console.log(err);
+            return res.json([]);
+        }
+
         res.json(result);
 
     });
