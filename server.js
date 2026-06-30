@@ -18,7 +18,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-const PORT = 3005;
+const PORT = process.env.PORT || 3005;
 
 // Home Page
 app.get("/", (req, res) => {
@@ -202,5 +202,5 @@ app.get("/api/members", (req, res) => {
 console.log("App loaded successfully");
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
